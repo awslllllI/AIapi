@@ -1,0 +1,136 @@
+# LiteLLM Proxy — 免费 API 聚合
+# auto 排序原则：周期额度 > 同档性能 > 定额（价=0）
+# 密钥一律走环境变量
+
+model_list:
+  # ========== auto：首选 = 周期额度里最强可用 ==========
+  # 1) 魔搭日额度 · Qwen3.8-27B（周期 + 性能最强，实测可用）
+  - model_name: auto
+    litellm_params:
+      model: openai/Qwen/Qwen3.8-27B
+      api_base: https://api-inference.modelscope.cn/v1
+      api_key: os.environ/MODELSCOPE_API_KEY
+      timeout: 120
+
+  # 2) 魔搭日额度 · Qwen3.5-27B（周期 · 性能次之）
+  - model_name: auto-modelscope-35
+    litellm_params:
+      model: openai/Qwen/Qwen3.5-27B
+      api_base: https://api-inference.modelscope.cn/v1
+      api_key: os.environ/MODELSCOPE_API_KEY
+      timeout: 120
+
+  # 3) Gemini Free 日额度（周期 · 能力强，国内网络常失败则跳过）
+  - model_name: auto-gemini
+    litellm_params:
+      model: gemini/gemini-2.0-flash
+      api_key: os.environ/GEMINI_API_KEY
+      timeout: 120
+
+  # 4) OpenRouter :free 日请求（周期 · 质量不稳定，靠后）
+  - model_name: auto-openrouter
+    litellm_params:
+      model: openrouter/openrouter/free
+      api_key: os.environ/OPENROUTER_API_KEY
+      timeout: 120
+
+  # 5) Groq Free 日额度（周期 · 当前常无 Key / 登录困难）
+  - model_name: auto-groq
+    litellm_params:
+      model: groq/openai/gpt-oss-20b
+      api_key: os.environ/GROQ_API_KEY
+      timeout: 120
+
+  # ---------- 以下为定额价=0（按性能降序）----------
+  # 6) 智谱 Flash（定额 · ~30B 级，优于硅基小模型；高峰易 429）
+  - model_name: auto-zhipu
+    litellm_params:
+      model: openai/glm-4.7-flash
+      api_base: https://open.bigmodel.cn/api/paas/v4
+      api_key: os.environ/ZHIPU_API_KEY
+      timeout: 120
+
+  # 7) 硅基 Qwen3.5-9B（定额 · 中小）
+  - model_name: auto-siliconflow-9b
+    litellm_params:
+      model: openai/Qwen/Qwen3.5-9B
+      api_base: https://api.siliconflow.cn/v1
+      api_key: os.environ/SILICONFLOW_API_KEY
+      timeout: 120
+
+  # 8) 硅基 Qwen2.5-7B（定额 · 最弱兜底）
+  - model_name: auto-siliconflow-7b
+    litellm_params:
+      model: openai/Qwen/Qwen2.5-7B-Instruct
+      api_base: https://api.siliconflow.cn/v1
+      api_key: os.environ/SILICONFLOW_API_KEY
+      timeout: 120
+
+  # ========== cn：仅国内定额，按性能 ==========
+  - model_name: cn
+    litellm_params:
+      model: openai/glm-4.7-flash
+      api_base: https://open.bigmodel.cn/api/paas/v4
+      api_key: os.environ/ZHIPU_API_KEY
+
+  - model_name: cn-sf-9b
+    litellm_params:
+      model: openai/Qwen/Qwen3.5-9B
+      api_base: https://api.siliconflow.cn/v1
+      api_key: os.environ/SILICONFLOW_API_KEY
+
+  - model_name: cn-sf-7b
+    litellm_params:
+      model: openai/Qwen/Qwen2.5-7B-Instruct
+      api_base: https://api.siliconflow.cn/v1
+      api_key: os.environ/SILICONFLOW_API_KEY
+
+  - model_name: cn-modelscope
+    litellm_params:
+      model: openai/Qwen/Qwen3.8-27B
+      api_base: https://api-inference.modelscope.cn/v1
+      api_key: os.environ/MODELSCOPE_API_KEY
+
+  # ========== fast / reason ==========
+  - model_name: fast
+    litellm_params:
+      model: groq/openai/gpt-oss-20b
+      api_key: os.environ/GROQ_API_KEY
+
+  - model_name: fast-qwen
+    litellm_params:
+      model: groq/qwen/qwen3.8-27b
+      api_key: os.environ/GROQ_API_KEY
+
+  - model_name: reason
+    litellm_params:
+      model: openai/glm-z1-flash
+      api_base: https://open.bigmodel.cn/api/paas/v4
+      api_key: os.environ/ZHIPU_API_KEY
+
+  - model_name: reason-groq
+    litellm_params:
+      model: groq/openai/gpt-oss-120b
+      api_key: os.environ/GROQ_API_KEY
+
+litellm_settings:
+  num_retries: 2
+  request_timeout: 120
+  fallbacks:
+    # 周期：魔搭27B → 魔搭3.5-27B → Gemini → OpenRouter → Groq
+    # 定额：智谱Flash → 硅基9B → 硅基7B
+    - auto:
+        - auto-modelscope-35
+        - auto-gemini
+        - auto-openrouter
+        - auto-groq
+        - auto-zhipu
+        - auto-siliconflow-9b
+        - auto-siliconflow-7b
+    # cn：智谱 → 硅基 → 魔搭（国内可用的最强周期）
+    - cn: [cn-sf-9b, cn-sf-7b, cn-modelscope]
+    - fast: [fast-qwen]
+    - reason: [reason-groq]
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY

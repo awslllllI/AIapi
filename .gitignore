@@ -1,0 +1,12 @@
+﻿.env
+.env.local
+.env.local.bak
+litellm.env
+*.pem
+__pycache__/
+.venv/
+venv/
+.idea/
+.vscode/
+*.log
+tmp-probe/
