@@ -1,0 +1,41 @@
+{
+  "purpose": "read-only Duck.ai page load diagnostic; no prompt submit",
+  "url_requested": "https://duck.ai/",
+  "final_url": "https://duck.ai/",
+  "hostname": "duck.ai",
+  "title": "Duck.ai by DuckDuckGo. Private AI chat. Free.",
+  "status": 200,
+  "body_snippet": "Duck.ai New Chat CTRL + ⇧ + O New Voice Chat New Image CTRL + ⇧ + I Settings & More Free by DuckDuckGo | Get the App Duck.ai, by DuckDuckGo Tools Fast 6 Luna Ask DuckDuckGo anonymizes your chats. By clicking 'Ask' you agree to our Privacy Policy and Terms of Service. How Duck.ai Works Chat Suggestions Create & Edit Images",
+  "challenge_markers_hit": [],
+  "prompt_candidates": {
+    "textarea": {
+      "count": 1,
+      "visible_sample": 1
+    },
+    "contenteditable": {
+      "count": 0,
+      "visible_sample": 0
+    },
+    "textbox_role": {
+      "count": 0,
+      "visible_sample": 0
+    },
+    "button": {
+      "count": 20,
+      "visible_sample": 6
+    }
+  },
+  "visible_button_labels": [
+    "New Chat\nCTRL + ⇧ + O",
+    "New Voice Chat",
+    "New Image\nCTRL + ⇧ + I",
+    "Settings & More\nFree",
+    "Cancel",
+    "Tools",
+    "Fast"
+  ],
+  "console_errors": [],
+  "failed_requests": [],
+  "policy_note": "Duck.ai Terms of Use prohibit automated querying and developing or offering AI services; this probe does not submit prompts.",
+  "policy_source": "https://duckduckgo.com/duckai/privacy-terms"
+}

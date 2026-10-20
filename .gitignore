@@ -1,4 +1,4 @@
-﻿.env
+.env
 .env.local
 .env.local.bak
 litellm.env
@@ -10,3 +10,6 @@ venv/
 .vscode/
 *.log
 tmp-probe/
+.local/browser-sessions/
+playwright/.auth/
+gateway/browser-sites.json

@@ -1,0 +1,61 @@
+{
+  "sites": [
+    {
+      "id": "example_authorized_site",
+      "model_id": "browser_ui_example_authorized_site",
+      "enabled": false,
+      "automation_authorized": false,
+      "base_url": "https://example.invalid/chat",
+      "allowed_domains": ["example.invalid"],
+      "auth": {
+        "mode": "manual_session",
+        "storage_state_path": ".local/browser-sessions/example_authorized_site.json"
+      },
+      "selectors": {
+        "prompt": "[data-testid='prompt-input']",
+        "submit": "[data-testid='send-button']",
+        "answer": "[data-testid='assistant-message']",
+        "dismiss": []
+      },
+      "limits": {
+        "max_concurrency": 1,
+        "min_interval_ms": 5000,
+        "requests_per_minute": 6
+      },
+      "headless": false,
+      "navigation_timeout_ms": 30000,
+      "action_timeout_ms": 10000,
+      "request_timeout_s": 90,
+      "stop_on_challenge": true
+    },
+    {
+      "id": "duck_ai",
+      "model_id": "duck-ai",
+      "enabled": false,
+      "automation_authorized": false,
+      "base_url": "https://duck.ai/",
+      "allowed_domains": ["duck.ai"],
+      "notes": "Hard-blocked by published Duck.ai Terms (automated querying prohibited). Do not set automation_authorized=true.",
+      "auth": {
+        "mode": "none",
+        "storage_state_path": ".local/browser-sessions/duck-ai.json"
+      },
+      "selectors": {
+        "prompt": "textarea",
+        "submit": "button",
+        "answer": ".assistant",
+        "dismiss": ["button:has-text(\"Cancel\")"]
+      },
+      "limits": {
+        "max_concurrency": 1,
+        "min_interval_ms": 10000,
+        "requests_per_minute": 1
+      },
+      "headless": true,
+      "navigation_timeout_ms": 30000,
+      "action_timeout_ms": 10000,
+      "request_timeout_s": 60,
+      "stop_on_challenge": true
+    }
+  ]
+}
